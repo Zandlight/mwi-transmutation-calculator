@@ -33,7 +33,7 @@ const BaseResultsDisplayComponent: React.FC<BaseResultsDisplayProps> = ({
     itemNamePrefix,
 }) => {
     const { theme } = useContext(ThemeContext);
-    const [sortField, setSortField] = useState<SortField>('itemName');
+    const [sortField, setSortField] = useState<SortField>('expectedOutput');
     const [sortDirection, setSortDirection] = useState<SortDirection>('asc');
 
     // Handle column sorting

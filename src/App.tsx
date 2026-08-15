@@ -16,7 +16,7 @@ const AppContent: React.FC = () => {
     const [transmutationItem, setTransmutationItem] = useState<string>('');
     const [transmutationQuantity, setTransmutationQuantity] = useState<number>(1);
     const [alphaLevel, setAlphaLevel] = useState<number>(0.05);
-    const [level, setLevel] = useState<number>(1);
+    const [level, setLevel] = useState<number>(100);
     const [catalyticTea, setCatalyticTea] = useState<boolean>(false);
     const [catalyst, setCatalyst] = useState<boolean>(false);
     const [primeCatalyst, setPrimeCatalyst] = useState<boolean>(false);
@@ -47,7 +47,7 @@ const AppContent: React.FC = () => {
             setPrimeCatalyst(primeCat);
             setItemNotFoundError(''); // Clear any existing error
         } else {
-            setItemNotFoundError("Item not found. Please try again")
+            setItemNotFoundError("Item not found. Please try again");
         }
     }
 
@@ -76,7 +76,7 @@ const AppContent: React.FC = () => {
             );
             setResults(transResults);
         }
-    }, [transmutationItem, transmutationQuantity, alphaLevel, level, catalyticTea, catalyst, primeCatalyst]);
+    }, [transmutationItem, transmutationQuantity, alphaLevel, level, catalyticTea, catalyst, primeCatalyst, activeView]);
 
     return (
         <div className={`app-container ${theme}`}>

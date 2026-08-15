@@ -2,11 +2,6 @@ import { itemNameToKey, getDropTable, itemKeyToName, getItemNameList, getItemLis
 
 // This file contains functions that perform calculations related to transmutation, including expected output and confidence intervals based on the input data.
 
-export interface TransmutationOutcome {
-    item: string;
-    probability: number;
-}
-
 export interface TransmutationDropEntry {
     itemHrid: string;
     dropRate: number;
@@ -51,7 +46,6 @@ export function calculateExpectedOutputByItemName(
 
     if (!drops.length) {
         console.error(`No drop table found for item ${itemName}`);
-        return [];
     }
 
     return drops.map(drop => {
@@ -66,12 +60,15 @@ export function calculateExpectedOutputByItemName(
         alpha = Object.keys(alphaToZScoreDict).includes(alpha.toString()) ? alpha : 0.05;
         const zScore = alphaToZScoreDict[alpha];
 
+        let lowerBound = Math.max(0, expectedOutput - stdDev * zScore);
+        let upperBound = Math.min(expectedOutput + stdDev * zScore, quantity * dropsPerSuccess);
+
         return {
             itemName,
             expectedOutput,
             confidenceInterval: [
-                Math.max(0, expectedOutput - stdDev * zScore),
-                Math.min(expectedOutput + stdDev * zScore, quantity * dropsPerSuccess)
+                lowerBound,
+                upperBound,
             ]
         };
     });
@@ -112,7 +109,7 @@ export function calculateRequiredTransmutations(
         const dropChance = targetDrop.dropRate;
         // Different success modifier per item since the item levels are different
         // -> must be calculated in the map function
-        const successChance = calculateSuccessChance(itemKey, level, catalyticTea, catalyst, primeCatalyst)
+        const successChance = calculateSuccessChance(itemKey, level, catalyticTea, catalyst, primeCatalyst);
         const dropsPerSuccess = targetDrop.minCount;
         const combinedSuccess = dropChance * successChance;
         const expectedTransmutations = targetQuantity / dropsPerSuccess * (1 - combinedSuccess) / combinedSuccess;
